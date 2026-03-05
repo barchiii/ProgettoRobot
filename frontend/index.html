@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot FrontEnd - Dashboard Produzione</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Banner errore -->
+    <div id="errorBanner" class="alert alert-danger banner-error d-none">
+        <strong>⚠️ ATTENZIONE:</strong>
+        <span id="errorMessage">Nessun dato ricevuto</span>
+        <button class="btn-close float-end" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="container-fluid py-4">
+
+        <!-- HEADER -->
+        <div class="row mb-4">
+            <div class="col-12">
+
+                <div
+                    class="d-flex justify-content-between align-items-center bg-primary text-white p-3 rounded">
+
+                    <h1 class="h4 mb-0">
+                        🏭 Robot FrontEnd - Dashboard Produzione
+                    </h1>
+
+                    <div class="d-flex gap-3 align-items-center">
+
+                        <span id="connectionStatus"
+                            class="badge status-offline px-3 py-2">
+                            OFFLINE
+                        </span>
+
+                        <button class="btn btn-light btn-sm" onclick="logout()">
+                            Logout
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <!-- FILTRI -->
+            <div class="col-lg-3 mb-4">
+
+                <div class="card sticky-top" style="top:20px">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Filtri Colori</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="rosso" checked>
+                            <label class="form-check-label text-danger">
+                                🔴 Rosso
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="blu" checked>
+                            <label class="form-check-label text-primary">
+                                🔵 Blu
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="verde" checked>
+                            <label class="form-check-label text-success">
+                                🟢 Verde
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="giallo">
+                            <label class="form-check-label text-warning">
+                                🟡 Giallo
+                            </label>
+                        </div>
+
+                        <hr>
+
+                        <button class="btn btn-primary w-100"
+                            onclick="applyFilters()">
+                            Aggiorna Grafici
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRAFICI -->
+            <div class="col-lg-9">
+
+                <div class="card mb-4">
+
+                    <div class="card-header d-flex justify-content-between">
+                        <h5>📊 Produzione Oraria</h5>
+                        <span id="totaleOrario"
+                            class="badge bg-secondary">
+                            0 pezzi
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+                        <canvas id="chartOrario"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="card mb-4">
+
+                    <div class="card-header d-flex justify-content-between">
+                        <h5>⏱️ Produzione Minutaria</h5>
+                        <span id="totaleMinutario"
+                            class="badge bg-secondary">
+                            0 pezzi
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+                        <canvas id="chartMinutario"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOG -->
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5>📋 Log Produzione</h5>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+
+                            <table
+                                class="table table-sm table-hover mb-0">
+
+                                <thead class="table-dark">
+
+                                    <tr>
+                                        <th>Ora</th>
+                                        <th>Colore</th>
+                                        <th>Codice</th>
+                                        <th>Qualità</th>
+                                        <th>Parametri</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="logTable">
+
+                                    <tr>
+                                        <td colspan="5"
+                                            class="text-center py-4 text-muted">
+                                            In attesa di dati...
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="toast-container"></div>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="js/charts.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+body {
+    background: #f5f7fa;
+}
+
+.status-online {
+    background-color: #28a745;
+}
+
+.status-offline {
+    background-color: #dc3545;
+}
+
+.status-warning {
+    background-color: #ffc107;
+}
+
+.log-latest {
+    background: #e3f2fd;
+    font-weight: bold;
+}
+
+.banner-error {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9998;
+}
+
+canvas {
+    height: 300px !important;
+}
