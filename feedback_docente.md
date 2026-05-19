@@ -45,4 +45,33 @@ In particolare, l’Analisi Tecnica dovrebbe includere:
 * comunicazione con backend o servizi esterni (API, gestione errori di rete, retry/timeouts, formati dati);
 * gestione di sicurezza e qualità (validazioni lato client, gestione permessi lato UI, logging, test minimi);
 
+# Feedback Docente – Gantt e Project Plan
 
+Il materiale consegnato mostra un miglioramento rispetto alla revisione precedente. In particolare, il Project Plan risulta ora distinto dal diagramma di Gantt e include elementi corretti di organizzazione del progetto, come obiettivi, assegnazione dei ruoli, pianificazione delle attività e attività di test previste.
+
+Il diagramma di Gantt risulta complessivamente ben strutturato e maggiormente dettagliato rispetto alla versione precedente, con una suddivisione più chiara delle attività e l’indicazione dei membri coinvolti nelle varie fasi del progetto.
+
+Restano tuttavia alcune carenze da correggere nelle prossime milestone.
+
+## Project Plan
+
+Il documento descrive correttamente le attività previste, ma manca ancora una parte più orientata alla gestione del progetto. In particolare sarebbe necessario esplicitare:
+
+- i criteri di completamento/verifica delle milestone;
+- le dipendenze tra le attività principali (es. componenti frontend dipendenti dall’integrazione backend);
+- i principali rischi progettuali e le possibili strategie di mitigazione;
+- le modalità di gestione delle modifiche durante lo sviluppo;
+- una descrizione più chiara del flusso organizzativo del team e dell’integrazione del lavoro tra i membri.
+
+La sezione “Eventuali modifiche” risulta al momento troppo generica e dovrebbe descrivere in modo più concreto come il gruppo intende gestire variazioni di tempi, attività o responsabilità.
+
+## Diagramma di Gantt
+
+Il Gantt risulta corretto nell’impostazione generale, ma può essere ulteriormente migliorato:
+
+- introducendo dipendenze esplicite tra task;
+- suddividendo alcune attività molto ampie in sotto-task più granulari;
+- evidenziando meglio le milestone principali del progetto;
+- collegando in modo più chiaro le attività di test e integrazione alle fasi precedenti di sviluppo.
+
+Nel complesso il lavoro mostra un recepimento concreto dei feedback precedenti e una migliore comprensione della pianificazione del progetto, anche se la parte di project management necessita ancora di maggiore approfondimento metodologico.
