@@ -91,6 +91,7 @@ body {
     margin-right: 8px;
 }
 
+/* Puntini di colore presenti nella selezione del colore da visualizzare */
 .dot-giallo { background-color: #ffd700; }
 .dot-verde { background-color: #00fa9a; }
 .dot-rosso { background-color: #ff0000; }

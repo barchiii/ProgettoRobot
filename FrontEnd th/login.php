@@ -1,6 +1,8 @@
 <?php
+// Avvio della sessione
 session_start();
 
+// Se l'utente è già loggato, viene reindirizzato alla dashboard
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 header("Location: index.php");
 exit;
@@ -11,27 +13,32 @@ require 'config.php';
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-$username = $conn->real_escape_string(trim($_POST['username']));
-$password = trim($_POST['password']);
+    $username = $conn->real_escape_string(trim($_POST['username']));
+    $password = trim($_POST['password']);
 
-$sql = "SELECT id, username, password FROM utenti WHERE username = '$username'";
-$result = $conn->query($sql);
+    $sql = "SELECT id, username, password FROM utenti WHERE username = '$username'";
+    $result = $conn->query($sql);
 
-if ($result && $result->num_rows > 0) {
-$row = $result->fetch_assoc();
+    // Controlla se l'utente eiste cercando un utente con lo username inserito
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
 
-if (md5($password) === $row['password']) {
-$_SESSION['logged_in'] = true;
-$_SESSION['username'] = $row['username'];
+        // Verifica della password usando password_verify
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['logged_in'] = true;
+            $_SESSION['username'] = $row['username'];
 
-header("Location: index.php");
-exit;
-} else {
-$error = "Password errata.";
-}
-} else {
-$error = "Utente non trovato.";
-}
+            // Se il login è avvenuto con successo l'utente viene reindirizzato alla dashboard
+            header("Location: index.php");
+            exit;
+        // Errore della password errata
+        } else {
+            $error = "Password errata.";
+        }
+    // Errore dell'utente non trovato       
+    } else {
+            $error = "Utente non trovato.";
+    }
 }
 ?>
 
@@ -50,6 +57,7 @@ $error = "Utente non trovato.";
 <nav class="navbar navbar-expand-lg navbar-custom py-3">
 <div class="container-fluid">
 <div class="ms-auto">
+<!-- Pulsante cambiare il tema da scuro a chiaro -->
 <button class="btn btn-custom rounded-circle p-2 px-3" onclick="toggleTheme()" title="Cambia Tema">
 <i id="themeIcon" class="fa-solid fa-sun"></i>
 </button>
@@ -59,14 +67,16 @@ $error = "Utente non trovato.";
 
 <div class="login-container">
 <div class="custom-card text-center">
-<h3 class="mb-4">Accesso Operatore</h3>
+<h3 class="mb-4">Login</h3>
 
+<!-- visualizzazione degli errori del login -->
 <?php if (!empty($error)): ?>
 <div class="alert alert-danger" role="alert">
 <?php echo $error; ?>
 </div>
 <?php endif; ?>
 
+<!-- Campo del nome utente -->
 <form method="POST" action="login.php">
 <div class="mb-3 text-start">
 <label for="username" class="form-label">Nome Utente</label>
@@ -81,6 +91,7 @@ style="background-color: var(--bg-color); color: var(--text-color); border: none
 >
 </div>
 
+<!-- Campo della password -->
 <div class="mb-4 text-start">
 <label for="password" class="form-label">Password</label>
 <input
@@ -94,6 +105,7 @@ style="background-color: var(--bg-color); color: var(--text-color); border: none
 >
 </div>
 
+<!-- Pulsante per accedere -->
 <button
 type="submit"
 class="btn w-100 fw-bold"
@@ -103,6 +115,7 @@ Accedi
 </button>
 </form>
 
+<!-- Link alla pagina di registrazione -->
 <p class="mt-4 mb-0">
 Non hai un account?
 <a href="register.php" style="color: var(--text-color); font-weight: 600; text-decoration: none;">
@@ -114,16 +127,17 @@ Registrati qui
 
 <script>
 function toggleTheme() {
-const body = document.body;
-const icon = document.getElementById("themeIcon");
-
-if (body.getAttribute("data-theme") === "light") {
-body.removeAttribute("data-theme");
-icon.className = "fa-solid fa-sun";
-} else {
-body.setAttribute("data-theme", "light");
-icon.className = "fa-solid fa-moon";
-}
+    const body = document.body;
+    const icon = document.getElementById("themeIcon");
+    // Controlla il tema del body, se è light lo rimuove, mettendo così il tema di default(scuro), altrimenti lo imposta a light
+    // Cambiando tema cambia anche l'icona del pulsante, sole per il tema chiaro e luna per il tema scuro
+    if (body.getAttribute("data-theme") === "light") {
+        body.removeAttribute("data-theme");
+        icon.className = "fa-solid fa-sun";
+    } else {
+        body.setAttribute("data-theme", "light");
+        icon.className = "fa-solid fa-moon";
+    }
 }
 </script>
 

@@ -12,38 +12,43 @@ $message = "";
 $messageType = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-$username = trim($_POST['username']);
-$password = trim($_POST['password']);
-$confirmPassword = trim($_POST['confirm_password']);
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+    $confirmPassword = trim($_POST['confirm_password']);
 
-if (empty($username) || empty($password) || empty($confirmPassword)) {
-$message = "Compila tutti i campi.";
-$messageType = "danger";
-} elseif ($password !== $confirmPassword) {
-$message = "Le password non coincidono.";
-$messageType = "danger";
-} else {
-$username = $conn->real_escape_string($username);
+    // Controlla se sono stati compilati tutti i campi
+    if (empty($username) || empty($password) || empty($confirmPassword)) {
+        $message = "Compila tutti i campi.";
+        $messageType = "danger";
+    // Controlla se le password coincifono        
+    } elseif ($password !== $confirmPassword) {
+        $message = "Le password non coincidono.";
+        $messageType = "danger";
+    } else {
+        $username = $conn->real_escape_string($username);
+        // Prepara una query per controllare se lo username inserito è già presente nel database
+        $checkSql = "SELECT id FROM utenti WHERE username = '$username'";
+        $checkResult = $conn->query($checkSql);
 
-$checkSql = "SELECT id FROM utenti WHERE username = '$username'";
-$checkResult = $conn->query($checkSql);
+        // Controlla se lo username inserito è già presente nel database
+        if ($checkResult && $checkResult->num_rows > 0) {
+            $message = "Username già esistente.";
+            $messageType = "danger";
+        } else {
+            // Hash della password e poi inserisce l'utente nel database
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $insertSql = "INSERT INTO utenti (username, password) VALUES ('$username', '$hashedPassword')";
 
-if ($checkResult && $checkResult->num_rows > 0) {
-$message = "Username già esistente.";
-$messageType = "danger";
-} else {
-$hashedPassword = md5($password);
-$insertSql = "INSERT INTO utenti (username, password) VALUES ('$username', '$hashedPassword')";
-
-if ($conn->query($insertSql) === TRUE) {
-$message = "Registrazione completata con successo. Ora puoi accedere.";
-$messageType = "success";
-} else {
-$message = "Errore durante la registrazione: " . $conn->error;
-$messageType = "danger";
-}
-}
-}
+            // Controlla se l'inserimento è avvenuto con successo, altrimenti mostra un messaggio di errore
+            if ($conn->query($insertSql) === TRUE) {
+                $message = "Registrazione completata con successo. Ora puoi accedere.";
+                $messageType = "success";
+            } else {
+                $message = "Errore durante la registrazione: " . $conn->error;
+                $messageType = "danger";
+            }
+        }
+    }
 }
 ?>
 
@@ -62,6 +67,7 @@ $messageType = "danger";
 <nav class="navbar navbar-expand-lg navbar-custom py-3">
 <div class="container-fluid">
 <div class="ms-auto">
+<!-- Pulsante cambiare il tema da scuro a chiaro -->    
 <button class="btn btn-custom rounded-circle p-2 px-3" onclick="toggleTheme()" title="Cambia Tema">
 <i id="themeIcon" class="fa-solid fa-sun"></i>
 </button>
@@ -71,14 +77,16 @@ $messageType = "danger";
 
 <div class="login-container">
 <div class="custom-card text-center">
-<h3 class="mb-4">Registrazione Utente</h3>
+<h3 class="mb-4">Registrazione</h3>
 
+<!-- visualizzazione degli errori della registrazione -->
 <?php if (!empty($message)): ?>
 <div class="alert alert-<?php echo $messageType; ?>" role="alert">
 <?php echo $message; ?>
 </div>
 <?php endif; ?>
 
+<!-- Campo del nome utente -->
 <form method="POST" action="register.php">
 <div class="mb-3 text-start">
 <label for="username" class="form-label">Nome Utente</label>
@@ -93,6 +101,7 @@ style="background-color: var(--bg-color); color: var(--text-color); border: none
 >
 </div>
 
+<!-- Campo della password -->
 <div class="mb-3 text-start">
 <label for="password" class="form-label">Password</label>
 <input
@@ -106,6 +115,7 @@ style="background-color: var(--bg-color); color: var(--text-color); border: none
 >
 </div>
 
+<!-- Campo per la conferma della password -->
 <div class="mb-4 text-start">
 <label for="confirm_password" class="form-label">Conferma Password</label>
 <input
@@ -119,6 +129,7 @@ style="background-color: var(--bg-color); color: var(--text-color); border: none
 >
 </div>
 
+<!-- Pulsante per la registrazione -->
 <button
 type="submit"
 class="btn w-100 fw-bold"
@@ -128,6 +139,7 @@ Registrati
 </button>
 </form>
 
+<!-- Link alla pagina di registrazione -->
 <p class="mt-4 mb-0">
 Hai già un account?
 <a href="login.php" style="color: var(--text-color); font-weight: 600; text-decoration: none;">
@@ -139,16 +151,17 @@ Accedi
 
 <script>
 function toggleTheme() {
-const body = document.body;
-const icon = document.getElementById("themeIcon");
-
-if (body.getAttribute("data-theme") === "light") {
-body.removeAttribute("data-theme");
-icon.className = "fa-solid fa-sun";
-} else {
-body.setAttribute("data-theme", "light");
-icon.className = "fa-solid fa-moon";
-}
+    const body = document.body;
+    const icon = document.getElementById("themeIcon");
+    // Controlla il tema del body, se è light lo rimuove, mettendo così il tema di default(scuro), altrimenti lo imposta a light
+    // Cambiando tema cambia anche l'icona del pulsante, sole per il tema chiaro e luna per il tema scuro
+    if (body.getAttribute("data-theme") === "light") {
+        body.removeAttribute("data-theme");
+        icon.className = "fa-solid fa-sun";
+    } else {
+        body.setAttribute("data-theme", "light");
+        icon.className = "fa-solid fa-moon";
+    }
 }
 </script>
 

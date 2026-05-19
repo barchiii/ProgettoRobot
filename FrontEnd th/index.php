@@ -471,15 +471,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     }
 
     function toggleTheme() {
-        const body = document.body;
-        const icon = document.getElementById('themeIcon');
-        if (body.getAttribute('data-theme') === 'light') {
-            body.setAttribute('data-theme', 'dark');
-            icon.className = 'fa-solid fa-moon';
-        } else {
-            body.setAttribute('data-theme', 'light');
-            icon.className = 'fa-solid fa-sun';
-        }
+    const body = document.body;
+    const icon = document.getElementById("themeIcon");
+
+    if (body.getAttribute("data-theme") === "light") {
+        body.removeAttribute("data-theme");
+        icon.className = "fa-solid fa-sun";
+    } else {
+        body.setAttribute("data-theme", "light");
+        icon.className = "fa-solid fa-moon";
+    }
     }
 
     function toggleColor(id, el) {
