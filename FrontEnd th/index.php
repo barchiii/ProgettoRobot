@@ -10,87 +10,28 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Neon Core</title>
+    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .navbar-custom .navbar-text {
-            color: #333 !important;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
-        }
-        body:not([data-theme="light"]) .navbar-custom .navbar-text {
-            color: #ffffff !important;
-        }
-        .usura-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-        .progress-vertical {
-            width: 35px;
-            height: 160px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.4);
-            transition: all 0.3s ease;
-        }
-        [data-theme="light"] .progress-vertical {
-            border: 2px solid rgba(0,0,0,0.3);
-            background: rgba(0,0,0,0.05);
-        }
-        .progress-bar-fill {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: linear-gradient(to top, #00fa9a, #ffd700, #ff4d4d);
-            transition: height 0.6s ease;
-        }
-        @keyframes pulse-critical {
-            0%   { box-shadow: 0 0 0 0    rgba(255,77,77,0.7); }
-            70%  { box-shadow: 0 0 0 15px rgba(255,77,77,0);   }
-            100% { box-shadow: 0 0 0 0    rgba(255,77,77,0);   }
-        }
-        .usura-critica {
-            animation: pulse-critical 1.5s infinite;
-            border-color: #ff4d4d !important;
-        }
-        .alert-critical-banner {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            font-weight: bold;
-        }
-        #connStatus {
-            font-size: 0.75rem;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-left: 12px;
-            vertical-align: middle;
-        }
-        .conn-ok      { background: #00fa9a22; color: #00fa9a; border: 1px solid #00fa9a55; }
-        .conn-waiting { background: #ffd70022; color: #ffd700; border: 1px solid #ffd70055; }
-        .conn-error   { background: #ff4d4d22; color: #ff4d4d; border: 1px solid #ff4d4d55; }
-    </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-custom py-3">
     <div class="container-fluid">
+        <!-- Scritta di benvenuto con l'username dell'account presente nella navbar -->
         <span class="navbar-text ms-2 fw-bold">
             Benvenuto, <?php echo htmlspecialchars($_SESSION['username']); ?>
             <span id="connStatus" class="conn-waiting">
+                <!-- Stato della connessione -->
+                 <i class="fa-solid fa-circle-notch fa-spin me-1"></i>In attesa…
                 <i class="fa-solid fa-circle-notch fa-spin me-1"></i>Connessione…
             </span>
         </span>
         <div class="ms-auto">
             <a class="nav-link" href="logout.php">
+                <!-- Pulsante di logout -->
                 <i class="fa-solid fa-right-from-bracket me-1"></i>Logout
             </a>
         </div>
@@ -99,6 +40,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 <div class="dashboard-container">
 
+    <!-- Pop up di usura critica quando supera l'85% -->
     <div id="usuraAlert"
          class="alert alert-danger alert-critical-banner d-none align-items-center mb-3"
          role="alert">
@@ -106,6 +48,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         <div>LIVELLO USURA CRITICO: Il sistema richiede manutenzione immediata (&gt;85%).</div>
     </div>
 
+    <!-- Pop up del sistema in pausa -->
     <div id="stopBanner"
          class="alert alert-warning alert-custom d-none align-items-center"
          role="alert">
@@ -113,6 +56,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         <div><strong>Sistema In Pausa:</strong> La ricezione dei dati è sospesa.</div>
     </div>
 
+    <!-- Pop up di errore di comunicazione con ThingsBoard -->
     <div id="errorBanner"
          class="alert alert-danger alert-custom d-none align-items-center"
          role="alert">
@@ -122,6 +66,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     <div class="row g-4 mb-3">
 
+    <!-- Filtri di visualizzazione del grafico per ora o per minuto -->
         <div class="col-md-2">
             <div class="custom-card">
                 <ul class="filter-list" id="timeFilters">
@@ -131,6 +76,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
         </div>
 
+        <!-- Filtri di visualizzazione del grafico per colore -->
         <div class="col-md-2">
             <div class="custom-card">
                 <ul class="filter-list" id="colorFilters">
@@ -153,13 +99,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <div class="row mb-3">
         <div class="col-12 d-flex justify-content-between">
             <div>
+                <!-- Pulsante per fermare o riprendere la ricezione dei dati da thingsboard -->
                 <button id="toggleBtn" class="btn btn-custom me-2" onclick="toggleData(this)">
                     <i class="fa-solid fa-stop me-2"></i>Stop
                 </button>
+                <!-- Pulsante per resettare i dati visualizzati nel log -->
                 <button class="btn btn-custom" onclick="clearLog()">
                     <i class="fa-solid fa-trash me-2"></i>Cancella log
                 </button>
             </div>
+            <!-- Pulsante per cambiare il tema da scuro a chiaro -->
             <button class="btn btn-custom rounded-circle p-2 px-3" onclick="toggleTheme()">
                 <i id="themeIcon" class="fa-solid fa-sun"></i>
             </button>
@@ -168,6 +117,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     <div class="row g-4">
 
+        <!-- Tabella di log con i dati dei prodotti, colore prodotto,data e ora -->
         <div class="col-md-7">
             <div class="custom-card" style="max-height:300px; overflow-y:auto;">
                 <table class="table table-transparent">
@@ -176,7 +126,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                         <th>Colore prodotto</th>
                         <th>Data</th>
                         <th>Ora</th>
-                        <th title="Tempo tra questo prodotto e il precedente">Δt ciclo</th>
                     </tr>
                     </thead>
                     <tbody id="logTableBody"></tbody>
@@ -184,21 +133,22 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
         </div>
 
+        <!-- Box con la media dei prodotti al minuto o all'ora -->
         <div class="col-md-3">
             <div class="custom-card d-flex flex-column align-items-center justify-content-center gap-3">
                 <h4 class="mb-0 fw-bold text-center" id="mediaValue">In attesa dati…</h4>
                 <div class="text-center" style="opacity:0.75; font-size:0.9rem; line-height:1.7;">
-                    <div>Ultimo Δt:&nbsp;<strong id="lastDelta">—</strong></div>
-                    <div>Tempo robot:&nbsp;<strong id="tempoValue">—</strong></div>
                 </div>
             </div>
         </div>
 
+        <!-- Livello di usura attuale -->
         <div class="col-md-2">
             <div class="custom-card usura-container">
                 <h6 class="fw-bold mb-2">Usura: <span id="usuraPercentText">0.0%</span></h6>
                 <div id="usuraBorder" class="progress-vertical">
-                    <div id="usuraFill" class="progress-bar-fill" style="height:0%;"></div>
+                    <div id="usuraFill" class="progress-bar-fill" style="height:0%;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -207,27 +157,37 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 </div>
 
 <script>
-    // ═══════════════════════════════════════════════════════════════════
-    //  COSTANTI
-    // ═══════════════════════════════════════════════════════════════════
+    
+    //tempo ideale in ms tra un prodotto e il successivo, se il tempo svolto supera i 3 secondi l'usura inizia ad aumentare
     const TEMPO_IDEALE_MS   = 3000;
+    
+    //tempo massimo tollerato tra un prodotto e il successivo, se il tempo svolto supera i 120 secondi il livello di usura raggiunge il 100%
     const TEMPO_ESAURITO_MS = 120000;
+
+    //Limite massimo di incremento dell'usura in un singolo ciclo, per evitare che ci siano degli aumenti di usura anomali
     const USURA_STEP_MAX = 3.0;
+
+    //Intervallo di tempo in ms per la richiesta di nuovi dati a ThingsBoard
     const POLL_MS = 3000;
 
-    // ═══════════════════════════════════════════════════════════════════
-    //  STATO GLOBALE
-    // ═══════════════════════════════════════════════════════════════════
+    //Tempo in ms dopo il quale, se non arrivano nuovi dati, si considera la connessione "inattiva"
+    const LIVE_TIMEOUT_MS = 12000; 
+
+    //valore dell'usura
     let currentUsura  = 0.0;
     let currentFormat = 'minuto';
+    //indica se il sistema è in pausa oppure no, se è true la ricezione dei dati è sospesa
+    //se è false la ricezione dei dati è attiva
     let isStopped     = false;
+
+    //Telemetrie 
     let prevColorTs = 0;
     let lastColorTs = 0;
     let lastRilevTs = 0;
     let lastTempoTs = 0;
     let firstFetch  = true; // al primo fetch memorizziamo i ts senza processare eventi
     let prevTsSnapshot = { colore: 0, rilev: 0, tempo: 0 }; // snapshot ts del ciclo precedente
-    const LIVE_TIMEOUT_MS = 12000; // dopo 12 s senza nuovi ts → Inattivo
+    
     let lastLiveMs = 0;
     let windowCounts = { 0: 0, 1: 0, 2: 0, 3: 0 };
     let windowStartMs = Date.now();

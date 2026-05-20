@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <nav class="navbar navbar-expand-lg navbar-custom py-3">
 <div class="container-fluid">
 <div class="ms-auto">
-<!-- Pulsante cambiare il tema da scuro a chiaro -->
+<!-- Pulsante per cambiare il tema da scuro a chiaro -->
 <button class="btn btn-custom rounded-circle p-2 px-3" onclick="toggleTheme()" title="Cambia Tema">
 <i id="themeIcon" class="fa-solid fa-sun"></i>
 </button>

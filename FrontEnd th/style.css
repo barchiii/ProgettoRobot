@@ -147,3 +147,65 @@ input::placeholder {
     color: #000000 !important; /* Nero per il tema chiaro */
     opacity: 0.6 !important;
 }
+
+.navbar-custom .navbar-text {
+            color: #333 !important;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        body:not([data-theme="light"]) .navbar-custom .navbar-text {
+            color: #ffffff !important;
+        }
+        .usura-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .progress-vertical {
+            width: 35px;
+            height: 160px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.4);
+            transition: all 0.3s ease;
+        }
+        [data-theme="light"] .progress-vertical {
+            border: 2px solid rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.05);
+        }
+        .progress-bar-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #00fa9a, #ffd700, #ff4d4d);
+            transition: height 0.6s ease;
+        }
+        @keyframes pulse-critical {
+            0%   { box-shadow: 0 0 0 0    rgba(255,77,77,0.7); }
+            70%  { box-shadow: 0 0 0 15px rgba(255,77,77,0);   }
+            100% { box-shadow: 0 0 0 0    rgba(255,77,77,0);   }
+        }
+        .usura-critica {
+            animation: pulse-critical 1.5s infinite;
+            border-color: #ff4d4d !important;
+        }
+        .alert-critical-banner {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+        #connStatus {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        .conn-ok      { background: #00fa9a22; color: #00fa9a; border: 1px solid #00fa9a55; }
+        .conn-waiting { background: #ffd70022; color: #ffd700; border: 1px solid #ffd70055; }
+        .conn-error   { background: #ff4d4d22; color: #ff4d4d; border: 1px solid #ff4d4d55; }
