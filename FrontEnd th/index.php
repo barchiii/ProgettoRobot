@@ -176,6 +176,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     //valore dell'usura
     let currentUsura  = 0.0;
     let currentFormat = 'minuto';
+
     //indica se il sistema è in pausa oppure no, se è true la ricezione dei dati è sospesa
     //se è false la ricezione dei dati è attiva
     let isStopped     = false;
@@ -317,7 +318,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         }
     }
 
-
+    // Aggiorna l'usura
     function updateUsuraDisplay(valore) {
         // Arrotonda il valore dell'usura
         const perc = valore.toFixed(1);
@@ -361,16 +362,17 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     // Funzione per mostrare l'icona della connessione
     function setConnStatus(type, text) {
-        const el = document.getElementById('connStatus');
+        const conn = document.getElementById('connStatus');
         const icon = {
             ok:      '<i class="fa-solid fa-circle me-1" style="font-size:.55rem"></i>',
             waiting: '<i class="fa-solid fa-circle-notch fa-spin me-1"></i>',
             error:   '<i class="fa-solid fa-triangle-exclamation me-1"></i>'
         };
-        el.className = `conn-${type}`;
-        el.innerHTML = (icon[type] ?? '') + text;
+        conn.className = `conn-${type}`;
+        conn.innerHTML = (icon[type] ?? '') + text;
     }
 
+    // Funzione per effettuare una richiesta cURL a thingsboard_api.php
     async function fetchTbData() {
         // Controlla che il sistema non sia in pausa
         if (isStopped) return;
@@ -402,7 +404,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 showErrorBanner(data.message ?? 'Errore di comunicazione con ThingsBoard.');
                 return;
             }
-            //nasconde il bannedi di errore
+            //nasconde il banner di di errore
             hideErrorBanner();
             
 
@@ -453,14 +455,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             // Live: almeno un ts è cambiato rispetto al ciclo precedente
             const anyNew = (
-                (colDev?.color_sensor_event?.[0]?.ts  > prevTsSnapshot.colore)  ||
+                (colDev?.color_sensor_event?.[0]?.ts > prevTsSnapshot.colore)  ||
                 (rilDev?.infrared_sensor_event?.[0]?.ts > prevTsSnapshot.rilev)  ||
-                (tmpDev?.time?.[0]?.ts                  > prevTsSnapshot.tempo)
+                (tmpDev?.time?.[0]?.ts > prevTsSnapshot.tempo)
+
+
             );
             // aggiorna snapshot per il prossimo ciclo
-            prevTsSnapshot.colore = colDev?.color_sensor_event?.[0]?.ts  ?? prevTsSnapshot.colore;
+            prevTsSnapshot.colore = colDev?.color_sensor_event?.[0]?.ts ?? prevTsSnapshot.colore;
             prevTsSnapshot.rilev  = rilDev?.infrared_sensor_event?.[0]?.ts ?? prevTsSnapshot.rilev;
-            prevTsSnapshot.tempo  = tmpDev?.time?.[0]?.ts                  ?? prevTsSnapshot.tempo;
+            prevTsSnapshot.tempo  = tmpDev?.time?.[0]?.ts ?? prevTsSnapshot.tempo;
 
             if (!firstFetch && anyNew) {
                 lastLiveMs = Date.now();
@@ -550,10 +554,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         document.querySelectorAll('#timeFilters li').forEach(li => li.classList.remove('active-filter'));
         el.classList.add('active-filter');
         currentFormat = f;
-        labelTime     = 1;
-        windowCounts  = { 0: 0, 1: 0, 2: 0, 3: 0 };
+        labelTime = 1;
+        windowCounts = { 0: 0, 1: 0, 2: 0, 3: 0 };
         windowStartMs = Date.now();
-        productionChart.data.labels   = [f === 'minuto' ? '+1m' : '+1h'];
+        productionChart.data.labels = [f === 'minuto' ? '+1m' : '+1h'];
         productionChart.data.datasets.forEach(d => d.data = [0]);
         productionChart.update();
     }

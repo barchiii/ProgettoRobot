@@ -37,16 +37,17 @@ function tb_curl(string $url, ?string $jwt = null, string $method = 'GET', ?stri
         // Restituisce la risposta come stringa invece di stamparla direttamente
         CURLOPT_RETURNTRANSFER => true,
         // Imposta gli header della richiesta
-        CURLOPT_HTTPHEADER     => $headers,
+        CURLOPT_HTTPHEADER => $headers,
         // Verifica il certificato SSL
         CURLOPT_SSL_VERIFYPEER => true,
-        // Imposta un timeout di 10 secondi per la richiesta
-        CURLOPT_TIMEOUT        => 10,
+        // Imposta un timeout la richiesta
+        CURLOPT_TIMEOUT => 10,
     ]);
 
     // Se il metodo è POST, aggiunge il corpo della richiesta
+
     if ($method === 'POST') {
-        curl_setopt($ch, CURLOPT_POST,       true);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body ?? '{}');
     }
     // Raccoglie le informazioni della richiesta cURL
@@ -112,9 +113,9 @@ function get_device_ids(string $jwt): array
             $name = $device['name']     ?? '';
             $id   = $device['id']['id'] ?? '';
 
-            if ($name === 'Primo Robot')        $ids['tempo']       = $id;
+            if ($name === 'Primo Robot')        $ids['tempo'] = $id;
             elseif ($name === 'Secondo Robot')  $ids['rilevazione'] = $id;
-            elseif ($name === 'Terzo Robot')    $ids['colore']      = $id;
+            elseif ($name === 'Terzo Robot')    $ids['colore'] = $id;
         }
     }
 
@@ -145,7 +146,7 @@ if (!$jwt) {
     ob_end_clean();
     echo json_encode([
         'status'  => 'error',
-        'message' => 'Login ThingsBoard fallito. Controlla le credenziali in config.php'
+        'message' => 'Login ThingsBoard fallito.'
     ]);
     exit;
 }
@@ -156,7 +157,7 @@ if (empty($ids)) {
     ob_end_clean();
     echo json_encode([
         'status'  => 'error',
-        'message' => 'Nessun device trovato. Nomi attesi: "Primo Robot", "Secondo Robot", "Terzo Robot"'
+        'message' => 'Nessun device trovato.'
     ]);
     exit;
 }
