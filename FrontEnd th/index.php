@@ -545,7 +545,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             stopBanner.classList.remove('d-flex');
             btn.innerHTML = '<i class="fa-solid fa-stop me-2"></i>Stop';
             isStopped = false;
-            firstFetch = true;  // ri-baseline i timestamp al riavvio
+            firstFetch = true;  
             fetchTbData();
         }
     }

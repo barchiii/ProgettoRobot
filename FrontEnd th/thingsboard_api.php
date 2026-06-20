@@ -65,6 +65,7 @@ function tb_curl(string $url, ?string $jwt = null, string $method = 'GET', ?stri
 }
 
 
+// Funzione per ottenere un token di autenticazione JWT valido per accedere a ThingsBoard Cloud, se non riesce restituisce null
 function get_tb_jwt(): ?string
 {
     // Controlla se è presente un token JWT valido in sessione, se sì lo restituisce
