@@ -75,3 +75,15 @@ Il Gantt risulta corretto nell’impostazione generale, ma può essere ulteriorm
 - collegando in modo più chiaro le attività di test e integrazione alle fasi precedenti di sviluppo.
 
 Nel complesso il lavoro mostra un recepimento concreto dei feedback precedenti e una migliore comprensione della pianificazione del progetto, anche se la parte di project management necessita ancora di maggiore approfondimento metodologico.
+
+# Valutazione Finale – Stato del Progetto e Documentazione
+
+Il progetto raggiunge complessivamente la sufficienza, mostrando la realizzazione di una base tecnica concreta e coerente con gli obiettivi principali dichiarati. Il gruppo ha sviluppato una struttura software funzionante, con componenti backend/frontend separate, gestione dei dati e prime funzionalità di monitoraggio e visualizzazione in tempo reale.
+
+Nel corso delle milestone sono stati recepiti parte dei feedback forniti, in particolare per quanto riguarda l’analisi tecnica, il diagramma di Gantt e il Project Plan, che risultano maggiormente strutturati rispetto alle versioni iniziali. Si evidenzia inoltre un miglioramento nell’organizzazione delle attività e nella suddivisione dei compiti tra i membri del gruppo.
+
+Restano tuttavia presenti diversi limiti sia nella documentazione sia nell’approfondimento progettuale. Le analisi dei requisiti e funzionale mantengono infatti un approccio prevalentemente descrittivo e generico, con una formalizzazione ancora limitata dei flussi, degli attori e del comportamento del sistema. Anche la parte tecnica, pur migliorata, risulta sviluppata in modo essenziale, con alcune componenti incomplete o solo parzialmente approfondite.
+
+Dal punto di vista metodologico, il gruppo ha mostrato una comprensione sufficiente delle attività di pianificazione e gestione del progetto, pur mantenendo un approccio ancora basilare al project management e alla strutturazione della documentazione tecnica.
+
+Nel complesso il lavoro dimostra l’effettiva realizzazione del minimo richiesto e una progressiva capacità di recepire le indicazioni fornite durante le revisioni, pur restando un progetto sviluppato in modo essenziale e orientato principalmente al raggiungimento dei requisiti minimi di funzionamento.
